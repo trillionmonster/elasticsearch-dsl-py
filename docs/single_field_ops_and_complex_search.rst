@@ -72,7 +72,7 @@ Usage
 
 2. Run the desired operations:
 
-* `Source Code <tests/test_integration/test_examples/examples/single_field_ops_and_complex_search.py>`_
+* `Source Code </tests/test_integration/test_examples/examples/single_field_ops_and_complex_search.py>`_
 
 .. code-block:: python
 
