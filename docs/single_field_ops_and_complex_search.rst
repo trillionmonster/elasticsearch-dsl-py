@@ -72,7 +72,7 @@ Usage
 
 2. Run the desired operations:
 
-* :ref:`examples/single_field_ops_and_complex_search.py`
+* `Source Code <examples/single_field_ops_and_complex_search.py>`_
 
 .. code-block:: python
 
