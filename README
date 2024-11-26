@@ -3,7 +3,7 @@ Elasticsearch DSL
 
 Elasticsearch DSL is a high-level library whose aim is to help with writing and
 running queries against Elasticsearch. It is built on top of the official
-low-level client (`elasticsearch-py <https://github.com/elastic/elasticsearch-py>`_).
+low-level client (`elasticsearch-py <https://github.com/trillionmonster/elasticsearch-py>`_).
 
 It provides a more convenient and idiomatic way to write and manipulate
 queries. It stays close to the Elasticsearch JSON DSL, mirroring its
@@ -28,7 +28,7 @@ Examples
 --------
 
 Please see the `examples
-<https://github.com/elastic/elasticsearch-dsl-py/tree/master/examples>`_
+<https://github.com/trillionmonster/elasticsearch-dsl-py/tree/master/examples>`_
 directory to see some complex examples using ``elasticsearch-dsl``.
 
 Compatibility
@@ -152,6 +152,9 @@ As you see, the library took care of:
 
 Something New
 -------------------
+
+see `elasticsearch-py <https://github.com/trillionmonster/elasticsearch-dsl-py/blob/main/examples/single_field_ops_and_complex_search.py>`_
+
 - Added the power symbol ** for use as an internal filter connector.
 - Added the modulo symbol % for use as an external Boolean filter - connector.
 - Added an embedding class for the OpenAI protocol.
@@ -414,7 +417,7 @@ examples can be seen below:
 unless there is an instance of Elasticsearch on which a connection can occur.
 By default, the test connection is attempted at ``localhost:9200``, based on
 the defaults specified in the ``elasticsearch-py`` `Connection
-<https://github.com/elastic/elasticsearch-py/blob/master/elasticsearch
+<https://github.com/trillionmonster/elasticsearch-py/blob/master/elasticsearch
 /connection/base.py#L29>`_ class. **Because running the integration
 tests will cause destructive changes to the Elasticsearch cluster, only run
 them when the associated cluster is empty.** As such, if the
@@ -434,7 +437,7 @@ Documentation is available at https://elasticsearch-dsl.readthedocs.io.
 Contribution Guide
 ------------------
 
-Want to hack on Elasticsearch DSL? Awesome! We have `Contribution-Guide <https://github.com/elastic/elasticsearch-dsl-py/blob/master/CONTRIBUTING.rst>`_.
+Want to hack on Elasticsearch DSL? Awesome! We have `Contribution-Guide <https://github.com/trillionmonster/elasticsearch-dsl-py/blob/master/CONTRIBUTING.rst>`_.
 
 License
 -------
