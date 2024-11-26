@@ -52,7 +52,7 @@ embedder_512 = Embedding(
 
 # Elasticsearch configuration
 ES_CONFIG = {
-    "address": "http://10.0.0.3:19200",
+    "address": "http://127.0.0.1:9200",
     "user": "elastic",
     "password": os.environ.get("ES_PASSWORD", "Moving9527135246"),
     "index_name": "cartesian_docs"
