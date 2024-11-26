@@ -150,6 +150,148 @@ As you see, the library took care of:
 - no curly or square brackets everywhere
 
 
+Something New
+-------------------
+- Added the power symbol ** for use as an internal filter connector.
+- Added the modulo symbol % for use as an external Boolean filter - connector.
+- Added an embedding class for the OpenAI protocol.
+
+.. code:: python
+
+    from elasticsearch_dsl import (
+        Document,
+        Search,
+        Text,
+        Keyword,
+        DenseVector,
+        GeoPoint,
+        connections,
+        Index,
+        Embedding,
+        SingleField,
+        SingleFieldValue
+    )
+
+    embedder_1024 = Embedding(base_url='http://localhost:8083', model_name="/Conan")
+    embedder_512 = Embedding(
+        base_url='http://localhost:8080',
+        model_name="/stella-mrl-large-zh-v3.5-1792d",
+        select_dims=512
+    )
+
+
+    embedder_1024 = Embedding(base_url='http://localhost:8083', model_name="/Conan")
+
+    # Generate embedding for query term
+    embed = embedder_1024.embedding(["衣服"])[0]
+
+    # Define individual query components
+    q1 = Term("A", 1)
+    q2 = Match("C", "深圳")
+    q4 = Regexp("D", "A/.*/2")
+    q5 = Term("B", 2)
+    q6 = GeoDistance(
+        _field="location",
+        _value={"lat": 22.5430, "lon": 114.0500},
+        distance="10km"
+    )
+    q3 = Knn(field="HH", query_vector=embed, k=4, num_candidates=10000)
+
+    # Combine queries using Boolean operators
+    q = q3 ** (q1 & ((q5 % ~q4) & q2) & q6)
+
+    # Execute the search query
+    s = Search().query(q).index(ES_CONFIG["index_name"]).source(["A", "B", "C", "D", "G"])
+    hits = s.execute()
+
+
+
+
+- Implemented single-field operations and bulk operations.
+
+.. code:: python
+
+    def single_field_operate():
+        """
+        Add or update a single field in Elasticsearch documents.
+        """
+        # Establish connection to Elasticsearch
+        connections.create_connection(
+            hosts=[ES_CONFIG["address"]],
+            http_auth=(ES_CONFIG["user"], ES_CONFIG["password"]),
+            timeout=300
+        )
+
+        # Initialize embedder
+        embedder_1024 = Embedding(base_url='http://localhost:8083', model_name="/Conan")
+
+        # Initialize SingleField instance
+        single_field = SingleField(
+            index_name=ES_CONFIG["index_name"],
+            field_name="HH",
+            field_type=DenseVector(dims=1024)
+        )
+
+        # Retrieve documents to update
+        search_query = Search(index=ES_CONFIG["index_name"]).source(includes=['C'])
+        docs = list(search_query.scan())
+
+        # Generate embeddings for field 'C'
+        embeddings = embedder_1024.embedding([item.C for item in docs], verbose=True)
+        datas = []
+
+        # Prepare data for bulk update
+        for doc, embedding_vector in zip(docs, embeddings):
+            datas.append(SingleFieldValue(embedding_vector, doc.meta.id))
+
+        # Perform bulk update of the single field
+        result = single_field.bulk(datas, verbose=True, total=len(datas), chunk_size=10, stats_only=True)
+        print(result)
+
+    async def async_single_field_operate():
+        """
+        Asynchronously add or update a single field in Elasticsearch documents.
+        """
+        # Establish asynchronous connection to Elasticsearch
+        async_connections.create_connection(
+            hosts=[ES_CONFIG["address"]],
+            http_auth=(ES_CONFIG["user"], ES_CONFIG["password"]),
+            timeout=300
+        )
+
+        # Initialize embedder
+        embedder_1024 = Embedding(base_url='http://localhost:8083', model_name="/Conan")
+
+        # Initialize AsyncSingleField instance
+        single_field = AsyncSingleField(
+            index_name=ES_CONFIG["index_name"],
+            field_name="HH",
+            field_type=DenseVector(dims=1024)
+        )
+        await single_field.put_mapping()
+
+        # Execute asynchronous search query
+        search_query = AsyncSearch(index=ES_CONFIG["index_name"]).source(includes=['C'])
+        docs = []
+        async for doc in search_query.scan():
+            docs.append(doc)
+
+        # Generate embeddings for field 'C'
+        embeddings = embedder_1024.embedding([item.C for item in docs], verbose=True)
+        datas = []
+
+        # Prepare data for bulk update
+        for doc, embedding_vector in zip(docs, embeddings):
+            datas.append(SingleFieldValue(embedding_vector, doc.meta.id))
+
+        # Perform bulk update asynchronously
+        result = await single_field.bulk(datas, verbose=True, total=len(datas), chunk_size=10, stats_only=True)
+        print(result)
+
+
+
+
+
 Persistence Example
 -------------------
 
