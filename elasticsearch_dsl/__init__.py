@@ -20,6 +20,7 @@ from .aggs import A, Agg
 from .analysis import analyzer, char_filter, normalizer, token_filter, tokenizer
 from .document import AsyncDocument, Document
 from .document_base import InnerDoc, M, MetaField, mapped_field
+
 from .exceptions import (
     ElasticsearchDslException,
     IllegalOperation,
@@ -81,7 +82,11 @@ from .field import (
 from .function import SF
 from .index import AsyncIndex, AsyncIndexTemplate, Index, IndexTemplate
 from .mapping import AsyncMapping, Mapping
+from .dynamic_field import AsyncSingleField, SingleField
+from .dynamic_field_base import SingleFieldValue
 from .query import Q, Query
+
+from .embedding_openai import Embedding
 from .response import AggResponse, Response, UpdateByQueryResponse
 from .search import (
     AsyncEmptySearch,
@@ -110,6 +115,7 @@ __all__ = [
     "AsyncMapping",
     "AsyncMultiSearch",
     "AsyncSearch",
+    "AsyncSingleField",
     "AsyncUpdateByQuery",
     "AttrDict",
     "AttrList",
@@ -173,6 +179,8 @@ __all__ = [
     "Search",
     "SearchAsYouType",
     "Short",
+    "SingleField",
+    "SingleFieldValue",
     "SparseVector",
     "TermsFacet",
     "Text",

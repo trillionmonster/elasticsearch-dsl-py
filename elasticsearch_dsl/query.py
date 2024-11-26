@@ -122,7 +122,9 @@ class Query(DslBase):
     __ror__: ClassVar[Callable[["Query", "Query"], "Query"]]
     __radd__: ClassVar[Callable[["Query", "Query"], "Query"]]
     __rand__: ClassVar[Callable[["Query", "Query"], "Query"]]
-
+    __rmod__: ClassVar[Callable[["Query", "Query"], "Query"]]
+    
+    __rpow__: ClassVar[Callable[["Query", "Query"], "Query"]]
     def __add__(self, other: "Query") -> "Query":
         # make sure we give queries that know how to combine themselves
         # preference
@@ -146,8 +148,31 @@ class Query(DslBase):
         if hasattr(other, "__rand__"):
             return other.__rand__(self)
         return Bool(must=[self, other])
+    
+    def __mod__(self, other: "Query") -> "Query":
+        # Add the other query as a filter condition to the current query
+        # where the other query serves as a 'must' condition and the current query as a 'should' condition
+        if hasattr(other, "__rmod__"):
+            return other.__rmod__(self)
+        return Bool(filter=other, must=[self])
+    
+    def __pow__(self, other: "Query") -> "Query":
+        # This method attempts to clone the query object with an added filter clause.
+        allowed_classes = (Bool, ConstantScore, FunctionScore, Knn)
+        
+        if isinstance(self, allowed_classes):
+            target = self._clone()
+            target.filter=other
+            return target
+        
+        raise TypeError(f"This operation is not supported for instances of {self.__class__.__name__}.")
 
+    
+    
 
+    
+    
+    
 class Bool(Query):
     """
     matches documents matching boolean combinations of other queries.
