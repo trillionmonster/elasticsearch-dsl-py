@@ -32,6 +32,8 @@ install_requires = [
     "typing-extensions",
     "elasticsearch>=8.0.0,<9.0.0",
     "elastic-transport>=8.0.0,<9.0.0",
+    "openai==1.55.0",
+    "numpy==2.1.3"
 ]
 
 async_requires = [
