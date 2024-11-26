@@ -67,9 +67,12 @@ Asynchronous version of single_field_operate() using:
 Usage
 -----
 
+
 1. Configure ES_CONFIG with your Elasticsearch settings
 
 2. Run the desired operations:
+
+* :ref:`examples/single_field_ops_and_complex_search.py`
 
 .. code-block:: python
 
@@ -93,9 +96,4 @@ Requirements
 * Elasticsearch 7.x+
 * Running embedding service for vector operations
 
-See Also
---------
 
-* :ref:`persistence`
-* :ref:`search_dsl` 
-* :ref:`update_by_query`
